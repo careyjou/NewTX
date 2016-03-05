@@ -1,14 +1,12 @@
-from T4 import buy_api, sell_api
+from T4 import *
 from datetime import datetime
+from k import *
 import sys, time, os
 
 lot = 0
 lot_limit = 1
 buy_list = []
 sell_list = []
-
-# TODO: FOR TESTING
-TEST_PRICE = 8500
 
 def print_status():
     print("# -- " + str(datetime.now()) + " -- #")
@@ -18,18 +16,6 @@ def print_status():
     elif lot < 0:
         print sell_list
     print
-
-def update_k_60():
-    return TEST_PRICE
-
-def update_k_day():
-    return TEST_PRICE
-
-def k_day_trend():
-    return 1
-
-def k_60_trend():
-    return 1
 
 def buy(price):
     global lot
