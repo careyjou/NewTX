@@ -1,25 +1,24 @@
 from T4 import buy_api, sell_api
-import sys, time
+from datetime import datetime
+import sys, time, os
 
 lot = 0
 lot_limit = 1
-k_day = 0
-k_60 = 0
 
 def print_remaining_lot():
     print "Remaining lot(s) = ", lot
 
 def update_k_60():
-    pass
+    return -1
 
 def update_k_day():
-    pass
+    return -1
 
-def is_up_trend(price):
-    return True
+def k_day_trend():
+    return 1
 
-def is_down_trend(price):
-    return True
+def k_60_trend():
+    return 1
 
 def buy(price):
     global lot
@@ -34,7 +33,7 @@ def sell(price):
         print_remaining_lot()
 
 def withdraw_or_not(price):
-    return True
+    return False
 
 def withdraw(price):
     global lot
@@ -51,18 +50,25 @@ def monitor_loop():
 
     try:
         while True:
-            update_k_day()
-            update_k_60()
-            if abs(lot) < lot_limit:
-                if is_up_trend(k_day) and is_up_trend(k_60):
-                    buy(k_60)
-                elif is_down_trend(k_day) and is_down_trend(k_60):
-                    sell(k_60)
 
-            elif abs(lot) > 0:
-                if withdraw_or_not(k_60):
-                    withdraw(k_60)
+            k_day = update_k_day()
+            k_60 = update_k_60()
+
+            print "lot = ", lot
+            if abs(lot) > 0 and withdraw_or_not(k_60):
+                withdraw(k_60)
+            elif abs(lot) < lot_limit:
+                # print "HERE 1"
+                if k_day_trend() == 1 and k_60_trend() == 1:
+                    buy(k_60)
+                elif k_day_trend() == -1 and k_60_trend() == -1:
+                    sell(k_60)
+            else:
+                print("Everythong goes well@" + str(datetime.now()))
+                time.sleep(1)
+
     except KeyboardInterrupt:
         print "Interrupted."
 
+sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
 monitor_loop()
