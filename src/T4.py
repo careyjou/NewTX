@@ -1,4 +1,4 @@
-
+''' the bridge that connects strategy to Sinopac's API '''
 def buy_api():
     return True
 
