@@ -1,4 +1,4 @@
-''' operations do in main.py are placed here for making the strategy concise '''
+''' operations done in main.py are placed here for making the strategy concise '''
 from T4 import *
 from datetime import datetime
 import g
