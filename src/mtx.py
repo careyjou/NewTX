@@ -1,5 +1,8 @@
 import urllib2
 import re
+import time
+import datetime
+from Tkinter import *
 
 deal_price_ascii = [166,168,165,230,187,249]
 deal_price_str = ""
@@ -21,4 +24,17 @@ def get_price():
 
 if __name__ == '__main__':
     # unit test for getting real time price from capital futures
-    get_price()
+    root = Tk()
+    root.wm_title("MTX Monitor")
+    lab = Label(root)
+    lab.pack()
+
+    def clock():
+        time = datetime.datetime.now().strftime("Time: %H:%M:%S")
+        lab['text'] = str(get_price()) + "@" + time
+        root.after(500, clock) # run itself again after 1000 ms
+
+    # run first time
+    clock()
+
+    root.mainloop()
