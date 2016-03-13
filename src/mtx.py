@@ -3,9 +3,12 @@ import re
 import time
 import datetime
 from Tkinter import *
+import BeautifulSoup
 
 deal_price_ascii = [166,168,165,230,187,249]
 deal_price_str = ""
+
+url = "https://www.capitalfutures.com.tw/quotations/default.asp?xy=1&xt=2&StockCode=MTX00"
 
 def get_price():
     global deal_price_str
@@ -13,7 +16,7 @@ def get_price():
         for i in deal_price_ascii:
             deal_price_str += chr(i)
 
-    url = "https://www.capitalfutures.com.tw/quotations/default.asp?xy=1&xt=2&StockCode=MTX00"
+    #url = "https://www.capitalfutures.com.tw/quotations/default.asp?xy=1&xt=2&StockCode=MTX00"
     resp = urllib2.urlopen(url)
     content = resp.read()
     start = content.find(deal_price_str)
@@ -21,6 +24,27 @@ def get_price():
     price = re.findall(r'([0-9]+\.[0-9]*)', content)
     print price[0]
     return price[0]
+
+def get_price_1():
+    info = []
+    page = urllib2.urlopen(url).read()
+    soup = BeautifulSoup.BeautifulSOAP(page)
+    table = soup.find("table",{ "class" : "type-01" })
+    for row in table.findAll("td"):
+        for item in row:
+            if isinstance(item, BeautifulSoup.NavigableString):    info.append(item)            
+            if isinstance(item, BeautifulSoup.Tag):    info.append(item.getText())
+    
+    #filter space and special chars
+    info = map(lambda x: x.replace(u'\u2022', ''),info)
+    info = map(lambda x: x.replace(u'\u3000', ''),info)
+    info = map(lambda x: x.strip(),info)
+    info = map(lambda x: x.replace("&nbsp;", ""),info)
+    info = filter(None, info)
+
+    for i in info: print i,
+    print
+    return info[5]
 
 if __name__ == '__main__':
     # unit test for getting real time price from capital futures
@@ -31,7 +55,7 @@ if __name__ == '__main__':
 
     def clock():
         time = datetime.datetime.now().strftime("Time: %H:%M:%S")
-        lab['text'] = str(get_price()) + "@" + time
+        lab['text'] = str(get_price_1()) + "@" + time
         root.after(500, clock) # run itself again after 1000 ms
 
     # run first time
