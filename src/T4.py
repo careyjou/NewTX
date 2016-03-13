@@ -4,3 +4,6 @@ def buy_api():
 
 def sell_api():
     return False
+
+def query():
+    pass
