@@ -7,32 +7,30 @@ import time;
 gateway = JavaGateway()
 instance = gateway.entry_point.getInstance()
 
-def buy_api(price,amount):
+def buy_api(price):
     old_lot = query_lot()
     print 'old lot = ' + str(old_lot)
-    ret = instance.buy(price,amount)
+    ret = instance.buy(price,"1")
     if ret == None:
         return False
 
     new_lot = query_lot()
-
     print 'new lot = ' + str(new_lot)
-    if new_lot < (old_lot + amount):
+    if new_lot < (old_lot + 1):
         return False
     else:
         return True
 
-def sell_api(price,amount):
+def sell_api(price):
     old_lot = query_lot()
     print 'old lot = ' + str(old_lot)
-    ret = instance.sell(price,amount)
+    ret = instance.sell(price,"1")
     if ret == None:
         return False
 
     new_lot = query_lot()
-
     print 'new lot = ' + str(new_lot)
-    if new_lot < (old_lot + amount):
+    if new_lot < (old_lot + 1):
         return False
     else:
         return True
