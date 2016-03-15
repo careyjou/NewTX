@@ -46,7 +46,10 @@ def query_unsettled():
     while ret.find('Error') != -1:
         time.sleep(5)
         ret = instance.queryUnsettled().encode("big5")
-        
-    # TODO: What will be returned if the # of lot = 0?
-    list = ret.split()
-    return list
+
+    if ret.find("MTX") == -1:
+        # TODO: What will be returned if the # of lot = 0?
+        return 0
+    else:
+        list = ret.split()
+        return list
