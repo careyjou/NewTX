@@ -3,13 +3,13 @@ from T4 import *
 from datetime import datetime
 import g
 
-def buy(price):
-    if buy_api() == True:
+def buy(price,amount):
+    if buy_api(price,amount) == True:
         g.lot +=1
         g.buy_list.append(price)
 
 def sell(price):
-    if sell_api() == True:
+    if sell_api(price,amount) == True:
         g.lot -=1
         g.sell_list.append(price)
 

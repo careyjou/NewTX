@@ -1,4 +1,4 @@
-from T4 import *
+import T4
 from k import *
 from g import *
 from action import *
@@ -15,15 +15,20 @@ def monitor_loop():
                 withdraw(k_60)
             elif abs(lot) < lot_limit:
                 if k_day_trend() == 1 and k_60_trend() == 1:
-                    buy(k_60)
+                    buy(k_60,"1")
                 elif k_day_trend() == -1 and k_60_trend() == -1:
-                    sell(k_60)
+                    sell(k_60,"1")
             else:
                 print_status()
-                time.sleep(1)
+                time.sleep(5)
 
     except KeyboardInterrupt:
         print "Interrupted."
 
 sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
+
+# TODO: For testing
+print T4.query_lot()
+# T4.buy_api("6000","1")
+
 monitor_loop()
