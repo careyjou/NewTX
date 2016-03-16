@@ -1,16 +1,21 @@
 ''' all operations related to k bar is put here '''
 from time import strftime
 import mtx
+import json
 
 time_price = dict()
-
+legal_hour = ["08", "09", "10", "11", "12", "13"]
 # TODO: FOR TESTING
 TEST_PRICE = 8500
 
 def update_k_60():
-    curr_time = strftime("%Y%m%d%H%M")
-    if curr_time.endswith("45"):
+    curr_time = strftime("%H%M")
+    curr_date = strftime("%Y%m%d")
+    if curr_time.endswith("45") and curr_time[0:2] in legal_hour:
         time_price[curr_time] = mtx.get_price()
+        outfile = '../history/' + current_date + '.json'
+        with open(outfile, 'w') as outfile:
+            json.dump(data, outfile)
 
 def update_k_day():
     # TODO
