@@ -1,10 +1,13 @@
 ''' all operations related to k bar is put here '''
-from time import strftime
+
 import mtx
 import json
+from datetime import datetime, timedelta
 
 time_price = dict()
+yesterday_time_price = dict()
 legal_hour = map(str,range(8,14))
+
 # TODO: FOR TESTING
 TEST_PRICE = 8500
 
@@ -18,8 +21,12 @@ def update_k_60():
             json.dump(data, outfile)
 
 def update_k_day():
-    # TODO
-    return TEST_PRICE
+    yesterday_date = datetime.now() - timedelta(1)
+    yesterday_str = yesterday_date.strftime("%Y%m%d")
+    infile = '../history/' + yesterday_str + '.json'
+    with open(infile, 'r') as infile:
+        yesterday_time_price = json.loads(infile.read())
+    return yesterday_time_price
 
 def k_day_trend():
     # TODO
@@ -30,4 +37,4 @@ def k_60_trend():
     return 1
 
 if __name__ == '__main__':
-    update_k_60()
+    print update_k_day()
