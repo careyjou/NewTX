@@ -1,5 +1,5 @@
 ''' all operations related to k bar is put here '''
-
+import os
 import mtx
 import json
 from datetime import datetime, timedelta
@@ -21,9 +21,17 @@ def update_k_60():
             json.dump(data, outfile)
 
 def update_k_day():
+
     yesterday_date = datetime.now() - timedelta(1)
     yesterday_str = yesterday_date.strftime("%Y%m%d")
     infile = '../history/' + yesterday_str + '.json'
+    while os.path.isfile(infile) != True:
+        yesterday_date = yesterday_date - timedelta(1)
+        yesterday_str = yesterday_date.strftime("%Y%m%d")
+        infile = '../history/' + yesterday_str + '.json'
+
+    print yesterday_date
+
     with open(infile, 'r') as infile:
         yesterday_time_price = json.loads(infile.read())
     return yesterday_time_price
