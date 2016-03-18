@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
-''' the bridge that connects strategy to Sinopac's API '''
 from py4j.java_gateway import JavaGateway
 import time
 

@@ -21,7 +21,6 @@ def update_k_60():
             json.dump(data, outfile)
 
 def update_k_day():
-
     yesterday_date = datetime.now() - timedelta(1)
     yesterday_str = yesterday_date.strftime("%Y%m%d")
     infile = '../history/' + yesterday_str + '.json'
@@ -29,8 +28,6 @@ def update_k_day():
         yesterday_date = yesterday_date - timedelta(1)
         yesterday_str = yesterday_date.strftime("%Y%m%d")
         infile = '../history/' + yesterday_str + '.json'
-
-    print yesterday_date
 
     with open(infile, 'r') as infile:
         yesterday_time_price = json.loads(infile.read())
