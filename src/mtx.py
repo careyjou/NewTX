@@ -9,8 +9,6 @@ from kivy.uix.widget import Widget
 from kivy.clock import Clock
 from kivy.properties import StringProperty
 
-Builder.load_file("MtxWidget.kv")
-
 class MtxWidget(Widget):
 	price = StringProperty()
 	deal_price_ascii = [166,168,165,230,187,249]
@@ -26,6 +24,7 @@ class MtxWidget(Widget):
 
 	def __init__(self, **kwargs):
 		super(MtxWidget, self).__init__(**kwargs)
+		self.update(None)
 
 	def get_price_TX(self):
 		global deal_price_str
@@ -79,19 +78,6 @@ class MtxWidget(Widget):
 		else:
 			self.price = str(self.get_price_EFTX_1()) + "@" + time_str
 
-
-	# Tk
-	# def clock():
-	# 	time = datetime.datetime.now()
-	# 	time_str = time.strftime("Time: %H:%M:%S")
-	# 	if TX_start_trade < time.time() < TX_end_trade:
-	# 		lab['text'] = str(get_price_TX_1()) + "@" + time_str
-	# 		root.after(500, clock) # run itself again after 500 ms
-	# 	else:
-	# 		lab['text'] = str(get_price_EFTX_1()) + "@" + time_str
-	# 		root.after(5000, clock) # run itself again after 5000 ms
-
-
 class MtxApp(App):
     def build(self):
         mtx = MtxWidget()
@@ -102,16 +88,5 @@ class MtxApp(App):
 if __name__ == '__main__':
 	# unit test for getting real time price from capital futures
 	# kivy
+	Builder.load_file("MtxWidget.kv")
 	MtxApp().run()
-
-
-	# Tk
-	# root = Tk()
-	# root.wm_title("TX Monitor")
-	# lab = Label(root)
-	# lab.pack()
-	#
-	# # run first time
-	# clock()
-	#
-	# root.mainloop()
