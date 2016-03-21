@@ -5,10 +5,12 @@ import json
 from datetime import datetime, timedelta
 import time
 import firebase
+import FirebaseUtil
 
 time_price = dict()
 yesterday_time_price = dict()
 legal_hour = map(str,range(8,14))
+fb = FirebaseUtil.FirebaseUtil()
 
 # TODO: FOR TESTING
 TEST_PRICE = 8500
@@ -38,23 +40,15 @@ def update_k_day():
 	return yesterday_time_price
 
 def update_k_day1():
-	date_delta=1
-	MONDAY, SUNDAY=0 ,6
-
-	MYURL  = 'https://boiling-heat-5294.firebaseio.com/'
-	EMAIL  = 'emersonhtc@gmail.com'
-	SECRET = '5zF8T37NlZB1HBHkb9T1zAZ6c2cPbXiXlzP5yJ8P'
-
-	authentication = firebase.FirebaseAuthentication(SECRET,EMAIL, True, True)
-	fb = firebase.FirebaseApplication(MYURL, authentication)
-
+	date_delta = 1
+	MONDAY,SUNDAY = 0,6
 	today = datetime.now().date()
 	date_delta = 3 if today.weekday() == MONDAY else 1
 	date_delta = 2 if today.weekday() == SUNDAY else 1
 
 	last_trade_date = today - timedelta(date_delta)
 	access_str = str(last_trade_date).replace('-','/')
-	return fb.get(access_str,None)
+	return fb.get(access_str)
 
 def k_day_trend():
 	# TODO
