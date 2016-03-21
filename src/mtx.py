@@ -28,13 +28,13 @@ class MtxWidget(Widget):
 
 	def get_price_TX(self):
 		global deal_price_str
-		if deal_price_str == "":
-			for i in deal_price_ascii:
-				deal_price_str += chr(i)
+		if self.deal_price_str == "":
+			for i in self.deal_price_ascii:
+				self.deal_price_str += chr(i)
 
-		resp = urllib2.urlopen(TX_url)
+		resp = urllib2.urlopen(self.TX_url)
 		content = resp.read()
-		start = content.find(deal_price_str)
+		start = content.find(self.deal_price_str)
 		content = content[start:start+150]
 		price = re.findall(r'([0-9]+\.[0-9]*)', content)
 		print price[0]
@@ -73,8 +73,11 @@ class MtxWidget(Widget):
 	def update(self,dt):
 		time = datetime.datetime.now()
 		time_str = time.strftime("Time: %H:%M:%S")
+		print self.TX_start_trade
+		print time.time()
+		print self.TX_end_trade
 		if self.TX_start_trade < time.time() < self.TX_end_trade:
-			self.price = str(self.get_price_TX_1()) + "@" + time_str
+			self.price = str(self.get_price_TX()) + "@" + time_str
 		else:
 			self.price = str(self.get_price_EFTX_1()) + "@" + time_str
 
