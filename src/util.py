@@ -2,9 +2,9 @@ import firebase
 import json
 
 class Util:
-    url = None
-    secret_key = None
-    email = None
+    url = 'https://boiling-heat-5294.firebaseio.com/'
+    secret_key = '5zF8T37NlZB1HBHkb9T1zAZ6c2cPbXiXlzP5yJ8P'
+    email = 'emersonhtc@gmail.com'
     fb = None
     authentication = None
 
