@@ -1,14 +1,12 @@
 import firebase
 import json
 
-class Util:
+class FirebaseUtil:
 
     fb = None
     authentication = None
 
-    def __init__(self, url = 'https://boiling-heat-5294.firebaseio.com/',
-                        secret_key = '5zF8T37NlZB1HBHkb9T1zAZ6c2cPbXiXlzP5yJ8P',
-                        email = 'emersonhtc@gmail.com'):
+    def __init__(self, url = 'https://boiling-heat-5294.firebaseio.com/', secret_key = '5zF8T37NlZB1HBHkb9T1zAZ6c2cPbXiXlzP5yJ8P', email = 'emersonhtc@gmail.com'):
         self.authentication = firebase.FirebaseAuthentication(secret_key,email, True, True)
         self.fb = firebase.FirebaseApplication(url, self.authentication)
         self.url = url
@@ -36,5 +34,5 @@ class Util:
             return False
 
 if __name__ == '__main__':
-    instance = Util()
+    instance = FirebaseUtil()
     print instance.get('/2016/03')
