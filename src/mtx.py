@@ -51,8 +51,8 @@ class MtxWidget(Widget):
 				if isinstance(item, BeautifulSoup.Tag):	info.append(item.getText())
 
 		info = re.findall(r'([0-9]+\.[0-9]*)', str(info))
-		print info[5]
-		return info[5]
+		print info[2]
+		return info[2]
 
 	def get_price_EFTX_1(self):
 		info = []
@@ -73,11 +73,8 @@ class MtxWidget(Widget):
 	def update(self,dt):
 		time = datetime.datetime.now()
 		time_str = time.strftime("Time: %H:%M:%S")
-		print self.TX_start_trade
-		print time.time()
-		print self.TX_end_trade
 		if self.TX_start_trade < time.time() < self.TX_end_trade:
-			self.price = str(self.get_price_TX()) + "@" + time_str
+			self.price = str(self.get_price_TX_1()) + "@" + time_str
 		else:
 			self.price = str(self.get_price_EFTX_1()) + "@" + time_str
 
