@@ -4,6 +4,8 @@ import time
 import datetime
 from Tkinter import *
 import BeautifulSoup
+import argparse
+import threading
 
 deal_price_ascii = [166,168,165,230,187,249]
 deal_price_str = ""
@@ -63,6 +65,7 @@ def get_price_EFTX_1():
 def clock():
 	time_obj = datetime.datetime.now()
 	time_str = time_obj.strftime("Time: %H:%M:%S")
+	print time_str
 	retry = 10
 	while retry > 0:
 		try:
@@ -81,16 +84,32 @@ def clock():
 			time.sleep(5)
 
 	return False
+	
 
+if __name__ == '__main__':	
+	parser = argparse.ArgumentParser(description='')
+	parser.add_argument('--tk', help='NOT generate a TK window',required=0,action='store_true')
+	args = parser.parse_args()
+	
+		
+	if not args.tk:
+		root = Tk()
+		root.wm_title("TX Monitor")
+		lab = Label(root)
+		lab.pack()
 
-if __name__ == '__main__':
-	# unit test for getting real time price from capital futures
-	root = Tk()
-	root.wm_title("TX Monitor")
-	lab = Label(root)
-	lab.pack()
+		# run first time
+		clock()
 
-	# run first time
-	clock()
-
-	root.mainloop()
+		root.mainloop()	
+	else:		
+		while(True):
+			time_obj = datetime.datetime.now()
+			time_str = time_obj.strftime("%H:%M:%S")
+			print time_str,
+			if TX_start_trade < time_obj.time() < TX_end_trade:
+				get_price_TX_1()
+			else:
+				get_price_EFTX_1()				
+			time.sleep(30)
+		
