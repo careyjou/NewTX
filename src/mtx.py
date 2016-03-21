@@ -61,14 +61,26 @@ def get_price_EFTX_1():
 	return info[4]
 
 def clock():
-	time = datetime.datetime.now()
-	time_str = time.strftime("Time: %H:%M:%S")
-	if TX_start_trade < time.time() < TX_end_trade:
-		lab['text'] = str(get_price_TX_1()) + "@" + time_str
-		root.after(500, clock) # run itself again after 500 ms
-	else:
-		lab['text'] = str(get_price_EFTX_1()) + "@" + time_str
-		root.after(5000, clock) # run itself again after 5000 ms
+	time_obj = datetime.datetime.now()
+	time_str = time_obj.strftime("Time: %H:%M:%S")
+	retry = 10
+	while retry > 0:
+		try:
+			if TX_start_trade < time_obj.time() < TX_end_trade:
+				lab['text'] = str(get_price_TX_1()) + "@" + time_str
+				root.after(500, clock) # run itself again after 500 ms
+				return True
+			else:
+				lab['text'] = str(get_price_EFTX_1()) + "@" + time_str
+				root.after(5000, clock) # run itself again after 5000 ms
+				return True
+		except:
+			retry -=1
+			print "get price fails. I'll try it 5 secs later."
+			print "Remaining trial(s) = " + str(retry)
+			time.sleep(5)
+
+	return False
 
 
 if __name__ == '__main__':
