@@ -41,34 +41,46 @@ def get_price_TX_1():
 			if isinstance(item, BeautifulSoup.Tag):	info.append(item.getText())
 
 	info = re.findall(r'([0-9]+\.[0-9]*)', str(info))
-	print info[5]
-	return info[5]
+	print info[2]
+	return info[2]
 
 def get_price_EFTX_1():
 	info = []
-	req = urllib2.Request(EFTX_url, headers={'User-Agent' : "Magic Browser"}) 
-	page = urllib2.urlopen(req).read()	
+	req = urllib2.Request(EFTX_url, headers={'User-Agent' : "Magic Browser"})
+	page = urllib2.urlopen(req).read()
 	soup = BeautifulSoup.BeautifulSOAP(page)
 	table = soup.find("table")
 	for row in table.findAll("td"):
 		for item in row:
 			for item_i in item:
 				if isinstance(item, BeautifulSoup.NavigableString):    info.append(item)
-				if isinstance(item, BeautifulSoup.Tag):    info.append(item.getText())            
+				if isinstance(item, BeautifulSoup.Tag):    info.append(item.getText())
 
 	info = re.findall(r'([0-9,]+\.[0-9]*)', str(info))
 	print info[4]
 	return info[4]
 
 def clock():
-	time = datetime.datetime.now()
-	time_str = time.strftime("Time: %H:%M:%S")
-	if TX_start_trade < time.time() < TX_end_trade:
-		lab['text'] = str(get_price_TX_1()) + "@" + time_str
-		root.after(500, clock) # run itself again after 500 ms
-	else:
-		lab['text'] = str(get_price_EFTX_1()) + "@" + time_str
-		root.after(5000, clock) # run itself again after 5000 ms
+	time_obj = datetime.datetime.now()
+	time_str = time_obj.strftime("Time: %H:%M:%S")
+	retry = 10
+	while retry > 0:
+		try:
+			if TX_start_trade < time_obj.time() < TX_end_trade:
+				lab['text'] = str(get_price_TX_1()) + "@" + time_str
+				root.after(500, clock) # run itself again after 500 ms
+				return True
+			else:
+				lab['text'] = str(get_price_EFTX_1()) + "@" + time_str
+				root.after(5000, clock) # run itself again after 5000 ms
+				return True
+		except:
+			retry -=1
+			print "get price fails. I'll try it 5 secs later."
+			print "Remaining trial(s) = " + str(retry)
+			time.sleep(5)
+
+	return False
 
 
 if __name__ == '__main__':

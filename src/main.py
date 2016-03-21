@@ -28,10 +28,8 @@ def monitor_loop():
     except KeyboardInterrupt:
         print "Interrupted."
 
-sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
-
-# TODO: For testing
-print T4.query_lot()
-# T4.buy_api("6000")
-
-monitor_loop()
+if __name__ == '__main__':
+    sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
+    # TODO: For testing
+    print T4.query_lot()
+    monitor_loop()

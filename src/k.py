@@ -4,7 +4,10 @@ import mtx
 import json
 from datetime import datetime, timedelta
 import time
+<<<<<<< HEAD
 
+=======
+>>>>>>> 08063b1ce4fe6758eda20c68b79fd2967efc3b1a
 import firebase
 
 time_price = dict()
@@ -57,7 +60,6 @@ def update_k_day1():
 	access_str = str(last_trade_date).replace('-','/')
 	return fb.get(access_str,None)
 	
-
 def k_day_trend():
 	# TODO
 	return 1
