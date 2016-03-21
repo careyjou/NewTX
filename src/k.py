@@ -5,6 +5,7 @@ import json
 from datetime import datetime, timedelta
 import time
 import FirebaseUtil
+import g
 
 time_price = dict()
 yesterday_time_price = dict()
@@ -41,8 +42,12 @@ def update_k_day():
 def last_trade_date(d):
     date_delta = 1
     MONDAY,SUNDAY = 0,6
-    date_delta = 3 if d.weekday() == MONDAY else 1
-    date_delta = 2 if d.weekday() == SUNDAY else 1
+    if d.weekday() == MONDAY:
+        date_delta = 3
+    elif d.weekday() == SUNDAY:
+        date_delta = 2
+    else:
+        date_delta = 1
     last = d - timedelta(date_delta)
     return last
 
@@ -60,14 +65,25 @@ def k_day_trend():
         trade_day = last_trade_date(trade_day)
         trade_days.append(trade_day)
 
+    print trade_days
     trade_days = map(lambda i: str(i).replace('-','/'), trade_days)
-    prices = map(lambda i: fb.get(str(i)), trade_days)
-    last_4_avg = sum(prices)/len(prices)
+    prices = map(lambda i: fb.get(i), trade_days)
     print prices
+
+    last_4_avg = sum(prices)/len(prices)
     print last_4_avg
-    # TODO: last 4 prices have been put in prices
-    # strategy here
-    return 1
+
+    # Derivation:
+    # (x1+x2+x3+x4+now)/5 >= (x1+x2+x3+x4)/4 + UP_THRESHOLD
+    # 4now >= x1 + x2 + x3 + x4 + 20UP_THRESHOLD
+    # now >= last_4_avg + 5UP_THRESHOLD
+    curr_price = mtx.get_price_TX()
+    if curr_price >= last_4_avg + 5*g.UP_THRESHOLD:
+        return 1
+    elif curr_price <= last_4_avg - 5*g.BOTTOM_THRESHOLD:
+        return -1
+    else:
+        return 0
 
 def k_60_trend():
     # TODO

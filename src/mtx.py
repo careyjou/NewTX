@@ -17,18 +17,8 @@ EFTX_start_trade=datetime.time(14,45)
 EFTX_end_trade=datetime.time(23,59)
 
 def get_price_TX():
-	global deal_price_str
-	if deal_price_str == "":
-		for i in deal_price_ascii:
-			deal_price_str += chr(i)
-
-	resp = urllib2.urlopen(TX_url)
-	content = resp.read()
-	start = content.find(deal_price_str)
-	content = content[start:start+150]
-	price = re.findall(r'([0-9]+\.[0-9]*)', content)
-	print price[0]
-	return price[0]
+	# front-end wrapper
+	return get_price_TX_1()
 
 def get_price_TX_1():
 	info = []
@@ -43,6 +33,24 @@ def get_price_TX_1():
 	info = re.findall(r'([0-9]+\.[0-9]*)', str(info))
 	print info[2]
 	return info[2]
+
+def get_price_TX_2():
+	global deal_price_str
+	if deal_price_str == "":
+		for i in deal_price_ascii:
+			deal_price_str += chr(i)
+
+	resp = urllib2.urlopen(TX_url)
+	content = resp.read()
+	start = content.find(deal_price_str)
+	content = content[start:start+150]
+	price = re.findall(r'([0-9]+\.[0-9]*)', content)
+	print price[0]
+	return price[0]
+
+def get_price_EFTX():
+	# front-end wrapper
+	return get_price_EFTX_1()
 
 def get_price_EFTX_1():
 	info = []
@@ -67,11 +75,11 @@ def clock():
 	while retry > 0:
 		try:
 			if TX_start_trade < time_obj.time() < TX_end_trade:
-				lab['text'] = str(get_price_TX_1()) + "@" + time_str
+				lab['text'] = str(get_price_TX()) + "@" + time_str
 				root.after(500, clock) # run itself again after 500 ms
 				return True
 			else:
-				lab['text'] = str(get_price_EFTX_1()) + "@" + time_str
+				lab['text'] = str(get_price_EFTX()) + "@" + time_str
 				root.after(5000, clock) # run itself again after 5000 ms
 				return True
 		except:
