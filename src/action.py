@@ -1,6 +1,6 @@
 ''' operations done in main.py are placed here for making the strategy concise '''
 '''
-Note that the functions of sell/buy/withdraw below are NOT guaranteed to succeed because using IOC rather than ROD.
+Note that the functions of sell/buy/withdraw below are NOT guaranteed to succeed because of using IOC rather than ROD.
 You have to check whether it succeeds or not by checking the returned TRUE/FALSE
 '''
 from T4 import *
