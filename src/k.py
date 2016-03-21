@@ -4,7 +4,6 @@ import mtx
 import json
 from datetime import datetime, timedelta
 import time
-import firebase
 import FirebaseUtil
 
 time_price = dict()
@@ -39,19 +38,35 @@ def update_k_day():
         yesterday_time_price = json.loads(infile.read())
     return yesterday_time_price
 
-def update_k_day1():
+def last_trade_date(d):
     date_delta = 1
     MONDAY,SUNDAY = 0,6
-    today = datetime.now().date()
-    date_delta = 3 if today.weekday() == MONDAY else 1
-    date_delta = 2 if today.weekday() == SUNDAY else 1
+    date_delta = 3 if d.weekday() == MONDAY else 1
+    date_delta = 2 if d.weekday() == SUNDAY else 1
+    last = d - timedelta(date_delta)
+    return last
 
-    last_trade_date = today - timedelta(date_delta)
-    access_str = str(last_trade_date).replace('-','/')
+def today():
+    return datetime.now().date()
+
+def update_k_day1():
+    access_str = str(last_trade_date(today())).replace('-','/')
     return fb.get(access_str)
 
 def k_day_trend():
-    # TODO
+    trade_days = []
+    trade_day = today()
+    for i in range(1,5):
+        trade_day = last_trade_date(trade_day)
+        trade_days.append(trade_day)
+
+    trade_days = map(lambda i: str(i).replace('-','/'), trade_days)
+    prices = map(lambda i: fb.get(str(i)), trade_days)
+    last_4_avg = sum(prices)/len(prices)
+    print prices
+    print last_4_avg
+    # TODO: last 4 prices have been put in prices
+    # strategy here
     return 1
 
 def k_60_trend():
@@ -59,4 +74,6 @@ def k_60_trend():
     return 1
 
 if __name__ == '__main__':
+    k_day_trend()
     print update_k_day1()
+    print last_trade_date(today())
