@@ -18,7 +18,7 @@ EFTX_end_trade=datetime.time(23,59)
 
 def get_price_TX():
 	# front-end wrapper
-	return get_price_TX_1()
+	return float(get_price_TX_1())
 
 def get_price_TX_1():
 	info = []
@@ -50,7 +50,7 @@ def get_price_TX_2():
 
 def get_price_EFTX():
 	# front-end wrapper
-	return get_price_EFTX_1()
+	return float(get_price_EFTX_1)()
 
 def get_price_EFTX_1():
 	info = []

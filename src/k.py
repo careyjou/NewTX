@@ -67,7 +67,7 @@ def k_day_trend():
 
     print trade_days
     trade_days = map(lambda i: str(i).replace('-','/'), trade_days)
-    prices = map(lambda i: fb.get(i), trade_days)
+    prices = map(lambda i: int(fb.get(i)), trade_days)
     print prices
 
     last_4_avg = sum(prices)/len(prices)
@@ -78,9 +78,9 @@ def k_day_trend():
     # 4now >= x1 + x2 + x3 + x4 + 20UP_THRESHOLD
     # now >= last_4_avg + 5UP_THRESHOLD
     curr_price = mtx.get_price_TX()
-    if curr_price >= last_4_avg + 5*g.UP_THRESHOLD:
+    if curr_price >= (last_4_avg + 5*g.UP_THRESHOLD):
         return 1
-    elif curr_price <= last_4_avg - 5*g.BOTTOM_THRESHOLD:
+    elif curr_price <= (last_4_avg - 5*g.BOTTOM_THRESHOLD):
         return -1
     else:
         return 0
@@ -90,6 +90,6 @@ def k_60_trend():
     return 1
 
 if __name__ == '__main__':
-    k_day_trend()
-    print update_k_day1()
-    print last_trade_date(today())
+    print k_day_trend()
+    # print update_k_day1()
+    # print last_trade_date(today())
