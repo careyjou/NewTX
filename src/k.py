@@ -52,7 +52,6 @@ def last_trade_date(d):
 def last_trade_date_1(d):
     # TODO: Replace the following code with trial and error.
     # Check whether or not there are prices for yesterday iteratively
-    weekend = ['Sunday', 'Saturday']
     d = d - timedelta(1)
     while fb.get(str(d).replace('-','/')) == None:
         d = d - timedelta(1)
