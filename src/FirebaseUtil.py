@@ -21,8 +21,9 @@ class FirebaseUtil:
 
     def get(self, rest_url):
         result = self.fb.get(rest_url, None)
-        if result.replace('.','').isdigit():
-            result = int(value)
+        if type(result) == type(str):
+            if result.replace('.','').isdigit():
+                result = int(value)
         return result
 
     def delete(self,key):

@@ -25,22 +25,17 @@ def update_k_60():
         with open(outfile, 'w') as outfile:
             json.dump(data, outfile)
 
-def update_k_day():
-    yesterday_date = datetime.now() - timedelta(1)
-    yesterday_str = yesterday_date.strftime("%Y%m%d")
-    infile = '../history/' + yesterday_str + '.json'
-    while os.path.isfile(infile) != True:
-        yesterday_date = yesterday_date - timedelta(1)
-        yesterday_str = yesterday_date.strftime("%Y%m%d")
-        infile = '../history/' + yesterday_str + '.json'
-
-    print yesterday_date
-
-    with open(infile, 'r') as infile:
-        yesterday_time_price = json.loads(infile.read())
-    return yesterday_time_price
-
 def last_trade_date(d):
+    # front-end wrapper function
+    return last_trade_date_1(d)
+
+def last_trade_date_1(d):
+    d = d - timedelta(1)
+    while fb.get(str(d).replace('-','/')) == None:
+        d = d - timedelta(1)
+    return d
+
+def last_trade_date_2(d):
     # TODO: Replace the following code with trial and error.
     # Check whether or not there are prices for yesterday iteratively
     weekend = ['Sunday', 'Saturday']
@@ -49,20 +44,8 @@ def last_trade_date(d):
         d = d - timedelta(1)
     return d
 
-def last_trade_date_1(d):
-    # TODO: Replace the following code with trial and error.
-    # Check whether or not there are prices for yesterday iteratively
-    d = d - timedelta(1)
-    while fb.get(str(d).replace('-','/')) == None:
-        d = d - timedelta(1)
-    return d
-
 def today():
     return datetime.now().date()
-
-def update_k_day1():
-    access_str = str(last_trade_date(today())).replace('-','/')
-    return fb.get(access_str)
 
 def k_day_trend():
     trade_days = []
@@ -91,11 +74,34 @@ def k_day_trend():
     else:
         return 0
 
+def update_k_day():
+    # front-end wrapper
+    return update_k_day_1()
+
+def update_k_day_1():
+    access_str = str(last_trade_date(today())).replace('-','/')
+    return fb.get(access_str)
+
+def update_k_day_2():
+    yesterday_date = datetime.now() - timedelta(1)
+    yesterday_str = yesterday_date.strftime("%Y%m%d")
+    infile = '../history/' + yesterday_str + '.json'
+    while os.path.isfile(infile) != True:
+        yesterday_date = yesterday_date - timedelta(1)
+        yesterday_str = yesterday_date.strftime("%Y%m%d")
+        infile = '../history/' + yesterday_str + '.json'
+
+    print yesterday_date
+
+    with open(infile, 'r') as infile:
+        yesterday_time_price = json.loads(infile.read())
+    return yesterday_time_price
+
 def k_60_trend():
     # TODO
     return 1
 
 if __name__ == '__main__':
     print k_day_trend()
-    # print update_k_day1()
+    # print update_k_day_1()
     print last_trade_date(today())
