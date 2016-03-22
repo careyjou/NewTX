@@ -21,10 +21,7 @@ class FirebaseUtil:
 
     def get(self, rest_url):
         result = self.fb.get(rest_url, None)
-        if result.replace('.','').isdigit() == True:
-            return float(result)
-        else:
-            return result
+        return result
 
     def delete(self,key):
         ret = self.fb.delete(self.url,key)
@@ -38,5 +35,5 @@ class FirebaseUtil:
 
 if __name__ == '__main__':
     instance = FirebaseUtil()
-    print instance.put('/2016/03/21','8746')
+    print instance.put('/2016/03/21',8746)
     print instance

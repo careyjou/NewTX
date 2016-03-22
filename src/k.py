@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 import time
 import FirebaseUtil
 import g
+import calendar
 
 time_price = dict()
 yesterday_time_price = dict()
@@ -40,16 +41,13 @@ def update_k_day():
     return yesterday_time_price
 
 def last_trade_date(d):
-    date_delta = 1
-    MONDAY,SUNDAY = 0,6
-    if d.weekday() == MONDAY:
-        date_delta = 3
-    elif d.weekday() == SUNDAY:
-        date_delta = 2
-    else:
-        date_delta = 1
-    last = d - timedelta(date_delta)
-    return last
+    # TODO: Replace the following code with trial and error.
+    # Check whether or not there are prices for yesterday iteratively
+    weekend = ['Sunday', 'Saturday']
+    d = d - timedelta(1)
+    while calendar.day_name[d.weekday()] in weekend:
+        d = d - timedelta(1)
+    return d
 
 def today():
     return datetime.now().date()
