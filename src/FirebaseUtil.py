@@ -35,5 +35,5 @@ class FirebaseUtil:
 
 if __name__ == '__main__':
     instance = FirebaseUtil()
-    print instance.put('/2016/03/21',8746)
+    print instance.get('/2016/03/2')
     print instance

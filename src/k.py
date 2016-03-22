@@ -49,6 +49,15 @@ def last_trade_date(d):
         d = d - timedelta(1)
     return d
 
+def last_trade_date_1(d):
+    # TODO: Replace the following code with trial and error.
+    # Check whether or not there are prices for yesterday iteratively
+    weekend = ['Sunday', 'Saturday']
+    d = d - timedelta(1)
+    while fb.get(str(d).replace('-','/')) == None:
+        d = d - timedelta(1)
+    return d
+
 def today():
     return datetime.now().date()
 
@@ -90,4 +99,4 @@ def k_60_trend():
 if __name__ == '__main__':
     print k_day_trend()
     # print update_k_day1()
-    # print last_trade_date(today())
+    print last_trade_date(today())
