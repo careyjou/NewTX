@@ -1,12 +1,12 @@
 import json
 
 class Entry:
-    BorS = None
+    B_or_S = None
     price = None
     id = None
 
-    def __init__(self, BorS, price, id):
-        self.BorS = BorS
+    def __init__(self, B_or_S, price, id):
+        self.B_or_S = B_or_S
         self.price = price
         self.id = id
 
@@ -29,10 +29,10 @@ class Trans:
         self.index += 1
         return result
 
-    def addTran(self, t):
+    def add_tran(self, t):
         self.trans.append(t)
 
-    def delTran(self, t):
+    def del_tran(self, t):
         self.trans.remove(t)
 
     def __str__(self):
@@ -48,12 +48,12 @@ if __name__ == '__main__':
     entry = Entry("B", 8700, "vn888")
 
     print "add entry"
-    trans_summary.addTran(entry)
+    trans_summary.add_tran(entry)
     # print len(trans_summary)
     # print trans_summary
     for tran in trans_summary:
         print tran
 
     print "del entry"
-    trans_summary.delTran(entry)
+    trans_summary.del_tran(entry)
     print trans_summary
