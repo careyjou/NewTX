@@ -1,9 +1,6 @@
-import urllib2
-import re
-import time
-import datetime
+import urllib2, BeautifulSoup
+import re, time, os, datetime, argparse
 from Tkinter import *
-import BeautifulSoup
 
 deal_price_ascii = [166,168,165,230,187,249]
 deal_price_str = ""
@@ -18,7 +15,10 @@ EFTX_end_trade=datetime.time(23,59)
 
 def get_price_TX():
 	# front-end wrapper
-	return float(get_price_TX_1())
+	ret = get_price_TX_1()
+	if ret.isdigit() == False:
+		ret = float(ret.replace(",",""))
+	return ret
 
 def get_price_TX_1():
 	info = []
@@ -50,7 +50,10 @@ def get_price_TX_2():
 
 def get_price_EFTX():
 	# front-end wrapper
-	return float(get_price_EFTX_1)()
+	ret = get_price_EFTX_1()
+	if ret.isdigit() == False:
+		ret = float(ret.replace(",",""))
+	return ret
 
 def get_price_EFTX_1():
 	info = []
@@ -71,6 +74,7 @@ def get_price_EFTX_1():
 def clock():
 	time_obj = datetime.datetime.now()
 	time_str = time_obj.strftime("Time: %H:%M:%S")
+	print time_str
 	retry = 10
 	while retry > 0:
 		try:
@@ -92,13 +96,28 @@ def clock():
 
 
 if __name__ == '__main__':
-	# unit test for getting real time price from capital futures
-	root = Tk()
-	root.wm_title("TX Monitor")
-	lab = Label(root)
-	lab.pack()
+	parser = argparse.ArgumentParser(description='')
+	parser.add_argument('--tk', help='NOT generate a TK window',required=0,action='store_true')
+	args = parser.parse_args()
+	sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
 
-	# run first time
-	clock()
+	if not args.tk:
+		root = Tk()
+		root.wm_title("TX Monitor")
+		lab = Label(root)
+		lab.pack()
 
-	root.mainloop()
+		# run first time
+		clock()
+
+		root.mainloop()
+	else:
+		while(True):
+			time_obj = datetime.datetime.now()
+			time_str = time_obj.strftime("%H:%M:%S")
+			print time_str,
+			if TX_start_trade < time_obj.time() < TX_end_trade:
+				get_price_TX()
+			else:
+				get_price_EFTX()
+			time.sleep(30)
