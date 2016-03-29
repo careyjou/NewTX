@@ -1,14 +1,10 @@
 import json
 
-class Entry:
-    B_or_S = None
-    price = None
-    id = None
+class Tran:
+    B_or_S, price, id = None, None, None
 
     def __init__(self, B_or_S, price, id):
-        self.B_or_S = B_or_S
-        self.price = price
-        self.id = id
+        self.B_or_S, self.price, self.id = B_or_S, price, id
 
     def __str__(self):
         ret = json.dumps(self, default=lambda o: o.__dict__,sort_keys=True, indent=4)
@@ -32,8 +28,12 @@ class Trans:
     def add_tran(self, t):
         self.trans.append(t)
 
-    def del_tran(self, t):
-        self.trans.remove(t)
+    def del_tran(self, id):
+        for i in self.trans:
+            if i.id == id:
+                self.trans.remove(i)
+                return True
+        return False
 
     def __str__(self):
             ret = json.dumps(self.trans, default=lambda o: o.__dict__,sort_keys=True, indent=4)
@@ -45,15 +45,15 @@ class Trans:
 
 if __name__ == '__main__':
     trans_summary = Trans()
-    entry = Entry("B", 8700, "vn888")
-
-    print "add entry"
-    trans_summary.add_tran(entry)
+    tran = Tran("B", 8700, "vn888")
+    tran2 = Tran("S", 8600, "vn777")
+    print "Add trans"
+    trans_summary.add_tran(tran)
+    trans_summary.add_tran(tran2)
     # print len(trans_summary)
     # print trans_summary
     for tran in trans_summary:
         print tran
 
-    print "del entry"
-    trans_summary.del_tran(entry)
+    print "Del tran vn888:", trans_summary.del_tran("vn888")
     print trans_summary
