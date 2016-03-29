@@ -37,7 +37,6 @@ class Trans:
 
     def __str__(self):
             ret = json.dumps(self.trans, default=lambda o: o.__dict__,sort_keys=True, indent=4)
-            ret = "{" + ret[1:-1] + "}"
             return ret
 
     def __len__(self):
