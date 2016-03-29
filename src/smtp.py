@@ -1,22 +1,23 @@
 import json
 import os
 import smtplib
+import time
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 
-def sendGmailSmtp(strGmailUser,strGmailPassword,strRecipient,strSubject,strContent):
-    strMessage = MIMEMultipart()
-    strMessage['From'] = strGmailUser
-    strMessage['To'] = strRecipient
-    strMessage['Subject'] = strSubject
-    strMessage.attach(MIMEText(strContent))
-    mailServer = smtplib.SMTP('smtp.gmail.com', 587)
-    mailServer.ehlo()
-    mailServer.starttls()
-    mailServer.ehlo()
-    mailServer.login(strGmailUser, strGmailPassword)
-    mailServer.sendmail(strGmailUser, strRecipient, strMessage.as_string())
-    mailServer.close()
+def send_gmail_smtp(username, password, recipient, subject, content):
+    message = MIMEMultipart()
+    message['From'] = username
+    message['To'] = recipient
+    message['Subject'] = subject
+    message.attach(MIMEText(content))
+    mail_server = smtplib.SMTP('smtp.gmail.com', 587)
+    mail_server.ehlo()
+    mail_server.starttls()
+    mail_server.ehlo()
+    mail_server.login(username,  password)
+    mail_server.sendmail(username, recipient, message.as_string())
+    mail_server.close()
     return 'sent'
 
 if __name__ == '__main__':
@@ -26,4 +27,6 @@ if __name__ == '__main__':
         ret = json.load(infile)
 
     for receiver in ret:
-        print "To " + receiver + ": " + sendGmailSmtp('software.ellie','ifdadyajopyggrtd','yoshijava@gmail.com','Test for project ellie','as title')
+        subject = time.strftime("From Ellie @ %Y-%m-%d %H:%M:%S")
+        content = "As title"
+        print "To " + receiver + ": " + send_gmail_smtp('software.ellie', 'ifdadyajopyggrtd', 'yoshijava@gmail.com', subject, content)
