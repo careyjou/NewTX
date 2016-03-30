@@ -18,12 +18,16 @@ TEST_PRICE = 8500
 
 def update_k_60():
     curr_time = time.strftime("%H%M")
-    curr_date = time.strftime("%Y%m%d")
+    curr_date = time.strftime("/%Y/%m/%d/")
+    # update
     if curr_time.endswith("45") and curr_time[0:2] in legal_hour:
-        time_price[curr_time] = mtx.get_price()
-        outfile = '../history/' + current_date + '.json'
-        with open(outfile, 'w') as outfile:
-            json.dump(data, outfile)
+        price = mtx.get_price()
+        time_price[curr_time] = price
+        key = curr_date + curr_time
+        instance.put(key, price)
+
+    # TODO: return most recent 60K. Take care of the problem of acrossing two days.
+    time_price = json.loads(fb.get(curr_date))
 
 def last_trade_date(d):
     # front-end wrapper function
@@ -75,27 +79,8 @@ def k_day_trend():
         return 0
 
 def update_k_day():
-    # front-end wrapper
-    return update_k_day_1()
-
-def update_k_day_1():
     access_str = str(last_trade_date(today())).replace('-','/')
-    return fb.get(access_str)
-
-def update_k_day_2():
-    yesterday_date = datetime.now() - timedelta(1)
-    yesterday_str = yesterday_date.strftime("%Y%m%d")
-    infile = '../history/' + yesterday_str + '.json'
-    while os.path.isfile(infile) != True:
-        yesterday_date = yesterday_date - timedelta(1)
-        yesterday_str = yesterday_date.strftime("%Y%m%d")
-        infile = '../history/' + yesterday_str + '.json'
-
-    print yesterday_date
-
-    with open(infile, 'r') as infile:
-        yesterday_time_price = json.loads(infile.read())
-    return yesterday_time_price
+    yesterday_time_price = json.loads(fb.get(access_str))
 
 def k_60_trend():
     # TODO

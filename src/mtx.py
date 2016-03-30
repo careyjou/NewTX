@@ -97,11 +97,11 @@ def clock():
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='')
-	parser.add_argument('--tk', help='NOT generate a TK window',required=0,action='store_true')
+	parser.add_argument('--tk', help='Generate a TK window',required=0,action='store_true')
 	args = parser.parse_args()
 	sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
 
-	if not args.tk:
+	if args.tk:
 		root = Tk()
 		root.wm_title("TX Monitor")
 		lab = Label(root)
