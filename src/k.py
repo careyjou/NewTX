@@ -17,17 +17,29 @@ fb = FirebaseUtil.FirebaseUtil()
 TEST_PRICE = 8500
 
 def update_k_60():
-    curr_time = time.strftime("%H%M")
+    curr_hour = time.strftime("%H")
+    curr_min = time.strftime("%M")
     curr_date = time.strftime("/%Y/%m/%d/")
+    curr_time = curr_hour + curr_min
     # update
-    if curr_time.endswith("45") and curr_time[0:2] in legal_hour:
+    if curr_min == "45" and curr_hour in legal_hour:
         price = mtx.get_price()
+        # 0945 = 09 + 45
         time_price[curr_time] = price
         key = curr_date + curr_time
         instance.put(key, price)
 
-    # TODO: return most recent 60K. Take care of the problem of acrossing two days.
-    time_price = json.loads(fb.get(curr_date))
+        # update the internal data structure
+        # TODO: What if we start this program in the middle of the business hour?
+        time_price = json.loads(fb.get(curr_date))
+
+        if int(curr_min) >= 45:
+            return time_price[curr_hour + "45"]
+        elif int(curr_min) <= 44:
+            last_60_k_time = str(int(curr_hour)-1) + "45"
+            return time_price[last_60_k_time]
+        else:
+            raise Exception("This is impossible...")
 
 def last_trade_date(d):
     # front-end wrapper function
