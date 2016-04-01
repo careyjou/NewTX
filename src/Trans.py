@@ -26,7 +26,13 @@ class Trans:
         return result
 
     def add_tran(self, t):
-        self.trans.append(t)
+        if isinstance(t, Tran):
+            self.trans.append(t)
+        elif isinstance(t, str):
+            # it should be a json string
+            ret = json.loads(t)
+            new_tran = Tran(ret['B_or_S'], ret['price'], ret['id'])
+            self.trans.append(new_tran)
 
     def del_tran(self, id):
         for i in self.trans:
@@ -49,6 +55,13 @@ if __name__ == '__main__':
     print "Add trans"
     trans_summary.add_tran(tran)
     trans_summary.add_tran(tran2)
+    trans_summary.add_tran(' \
+        { \
+            "B_or_S": "B", \
+            "price": 9527, \
+            "id": "vn666" \
+        }' \
+    )
     # print len(trans_summary)
     # print trans_summary
     for tran in trans_summary:
