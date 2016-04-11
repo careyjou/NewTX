@@ -1,3 +1,6 @@
 [submodule "T4py"]
 	path = src/T4py
 	url = https://github.com/emersonhtc/T4py.git
+[submodule "src/Ellie_Util"]
+	path = src/Ellie_Util
+	url = https://github.com/emersonhtc/Ellie_Util

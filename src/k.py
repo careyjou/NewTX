@@ -7,9 +7,9 @@ import time
 import FirebaseUtil
 import g
 import calendar
+from Ellie_Util.utils import get_Nday_price
 
 time_price = dict()
-yesterday_time_price = dict()
 legal_hour = map(str,range(8,14))
 fb = FirebaseUtil.FirebaseUtil()
 
@@ -41,40 +41,12 @@ def update_k_60():
         else:
             raise Exception("This is impossible...")
 
-def last_trade_date(d):
-    # front-end wrapper function
-    return last_trade_date_1(d)
-
-def last_trade_date_1(d):
-    d = d - timedelta(1)
-    while fb.get(str(d).replace('-','/')) == None:
-        d = d - timedelta(1)
-    return d
-
-def last_trade_date_2(d):
-    # TODO: Replace the following code with trial and error.
-    # Check whether or not there are prices for yesterday iteratively
-    weekend = ['Sunday', 'Saturday']
-    d = d - timedelta(1)
-    while calendar.day_name[d.weekday()] in weekend:
-        d = d - timedelta(1)
-    return d
-
 def today():
     return datetime.now().date()
 
 def k_day_trend():
-    trade_days = []
-    trade_day = today()
-    for i in range(1,5):
-        trade_day = last_trade_date(trade_day)
-        trade_days.append(trade_day)
-
-    print trade_days
-    trade_days = map(lambda i: str(i).replace('-','/'), trade_days)
-    prices = map(lambda i: int(fb.get(i)), trade_days)
+    prices = get_Nday_price('MTX', 5)[0:-1]
     print prices
-
     last_4_avg = sum(prices)/len(prices)
     print last_4_avg
 
@@ -90,15 +62,9 @@ def k_day_trend():
     else:
         return 0
 
-def update_k_day():
-    access_str = str(last_trade_date(today())).replace('-','/')
-    yesterday_time_price = json.loads(fb.get(access_str))
-
 def k_60_trend():
     # TODO
     return 1
 
 if __name__ == '__main__':
     print k_day_trend()
-    # print update_k_day_1()
-    print last_trade_date(today())
