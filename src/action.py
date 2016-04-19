@@ -3,36 +3,49 @@
 Note that the functions of sell/buy/withdraw below are NOT guaranteed to succeed because of using IOC rather than ROD.
 You have to check whether it succeeds or not by checking the returned TRUE/FALSE
 '''
-from T4 import *
+from T4py import *
 from datetime import datetime
 import g
 
 def buy(price):
-    ret = buy_api(price)
-    if ret == True:
-        g.lot +=1
-        g.buy_list.append(price)
-    return ret
+    old_lot = query_lot()
+    print 'old lot = ' + str(old_lot)
+    ret = buy(price, g.FUTURE_ID, lot_type = " ")
+    if ret == None:
+        return False
+
+    new_lot = query_lot()
+    print 'new lot = ' + str(new_lot)
+    if new_lot < (old_lot + 1):
+        return False
+    else:
+        return True
 
 def sell(price):
-    ret = sell_api(price)
-    if ret == True:
-        g.lot -=1
-        g.sell_list.append(price)
-    return ret
+    old_lot = query_lot()
+    print 'old lot = ' + str(old_lot)
+    ret = sell(price, g.FUTURE_ID, lot_type = " ")
+    if ret == None:
+        return False
+
+    new_lot = query_lot()
+    print 'new lot = ' + str(new_lot)
+    if new_lot < (old_lot + 1):
+        return False
+    else:
+        return True
 
 def withdraw_or_not(price):
     # TODO
     return False
 
 def withdraw(price):
-    if g.lot < 0:
+    old_lot = query_lot()
+    if old_lot < 0:
         ret = buy(price)
-        if ret == True: g.lot +=1
         return ret
-    elif g.lot > 0:
+    elif old_lot > 0:
         ret = sell(price)
-        if ret == True: g.lot -=1
         return ret
     else:
         print "You have nothing to offset, Mr. Loser."
